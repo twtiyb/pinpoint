@@ -56,7 +56,7 @@ public class JarProfilerPluginClassInjectorTest {
         PluginConfig pluginConfig = new PluginConfig(plugin, pluginPackageFilter);
         logger.debug("pluginConfig:{}", pluginConfig);
 
-        PlainClassLoaderHandler injector = new PlainClassLoaderHandler(pluginConfig);
+        ClassInjector injector = new PlainClassLoaderHandler(pluginConfig);
         final Class<?> loggerClass = injector.injectClass(contextTypeMatchClassLoader, logger.getClass().getName());
 
         logger.debug("ClassLoader{}", loggerClass.getClassLoader());
