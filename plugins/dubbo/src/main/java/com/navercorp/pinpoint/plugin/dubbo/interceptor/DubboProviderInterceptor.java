@@ -75,7 +75,6 @@ public class DubboProviderInterceptor extends SpanRecursiveAroundInterceptor {
 		final long spanID = NumberUtils.parseLong(invocation.getAttachment(DubboConstants.META_SPAN_ID), SpanId.NULL);
 		final short flags = NumberUtils.parseShort(invocation.getAttachment(DubboConstants.META_FLAGS), (short) 0);
 		final TraceId traceId = traceContext.createTraceId(transactionId, parentSpanID, spanID, flags);
-
 		return traceContext.continueTraceObject(traceId);
 	}
 
@@ -112,6 +111,7 @@ public class DubboProviderInterceptor extends SpanRecursiveAroundInterceptor {
 		recorder.recordApi(methodDescriptor);
 		recorder.recordAttribute(DubboConstants.DUBBO_RPC_ANNOTATION_KEY,
 				invocation.getInvoker().getInterface().getSimpleName() + ":" + invocation.getMethodName());
+		recorder.recordAttribute(DubboConstants.DUBBO_USER_ANNOTATION_KEY,invocation.getAttachment("userId", "1"));
 		try {
 			recorder.recordAttribute(DubboConstants.DUBBO_ARGS_ANNOTATION_KEY, JSON.json(invocation.getArguments()));
 		} catch (IOException e) {

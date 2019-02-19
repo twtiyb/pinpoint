@@ -37,6 +37,7 @@ public final class DubboConstants {
     public static final AnnotationKey DUBBO_ARGS_ANNOTATION_KEY = AnnotationKeyFactory.of(90, "dubbo.args",VIEW_IN_RECORD_SET);
     public static final AnnotationKey DUBBO_RESULT_ANNOTATION_KEY = AnnotationKeyFactory.of(91, "dubbo.result",VIEW_IN_RECORD_SET);
     public static final AnnotationKey DUBBO_RPC_ANNOTATION_KEY = AnnotationKeyFactory.of(92, "dubbo.rpc", VIEW_IN_RECORD_SET);
+    public static final AnnotationKey DUBBO_USER_ANNOTATION_KEY = AnnotationKeyFactory.of(93, "dubbo.user", VIEW_IN_RECORD_SET);
 
     public static final String META_DO_NOT_TRACE = "_DUBBO_DO_NOT_TRACE";
     public static final String META_TRANSACTION_ID = "_DUBBO_TRASACTION_ID";
