@@ -241,6 +241,11 @@
         <constructor-arg ref="clusterPointRouter"/>
     </bean>
 
+
+    <bean id="kafkaProducer" class="com.navercorp.pinpoint.collector.sender.KafkaSender">
+        <constructor-arg ref="collectorConfiguration"/>
+    </bean>
+
     <util:list id="channelStateChangeEventHandlers" value-type="com.navercorp.pinpoint.rpc.server.handler.ServerStateChangeEventHandler">
         <ref bean="agentLifeCycleChangeEventHandler"/>
     </util:list>

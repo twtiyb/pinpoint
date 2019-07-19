@@ -35,9 +35,11 @@ public final class DubboConstants {
     public static final ServiceType DUBBO_CONSUMER_SERVICE_TYPE = ServiceTypeFactory.of(9110, "DUBBO_CONSUMER", RECORD_STATISTICS);
     public static final ServiceType DUBBO_PROVIDER_SERVICE_NO_STATISTICS_TYPE = ServiceTypeFactory.of(9111, "DUBBO");
     public static final AnnotationKey DUBBO_ARGS_ANNOTATION_KEY = AnnotationKeyFactory.of(90, "dubbo.args",VIEW_IN_RECORD_SET);
+    public static final AnnotationKey DUBBO_ARGS_TYPE_ANNOTATION_KEY = AnnotationKeyFactory.of(95, "dubbo.args_type");
     public static final AnnotationKey DUBBO_RESULT_ANNOTATION_KEY = AnnotationKeyFactory.of(91, "dubbo.result",VIEW_IN_RECORD_SET);
     public static final AnnotationKey DUBBO_RPC_ANNOTATION_KEY = AnnotationKeyFactory.of(92, "dubbo.rpc", VIEW_IN_RECORD_SET);
     public static final AnnotationKey DUBBO_USER_ANNOTATION_KEY = AnnotationKeyFactory.of(93, "dubbo.user", VIEW_IN_RECORD_SET);
+    public static final AnnotationKey DUBBO_INVOCATION_ANNOTATION_KEY = AnnotationKeyFactory.of(94, "dubbo.invocation");
 
     public static final String META_DO_NOT_TRACE = "_DUBBO_DO_NOT_TRACE";
     public static final String META_TRANSACTION_ID = "_DUBBO_TRASACTION_ID";

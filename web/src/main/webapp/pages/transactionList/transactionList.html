@@ -1,8 +1,37 @@
 <!-- Add your site or application content here -->
 <time-slider-directive auto-loading="false"></time-slider-directive>
 
+
+<!-- traceIndexQuery -->
+<div style="margin: 5px">
+    <div style="float: left;width: 15%">
+        模块
+        <select class="application" ng-model="applicationSelected">
+            <option value="">-- 请选择 --</option>
+            <option ng-repeat="app in applications" value="{{app.text}}">{{app.text}}</option>
+        </select>
+    </div>
+    <div style="float: left;width: 10%">
+        用户id<input type="text" ng-model="userId" style="width: 100px;">
+    </div>
+    <div style="float: left;width: 15%">
+        traceId<input type="text" ng-model="traceId"></div>
+    <div style="float: left;width: 25%">接口名称<input type="text" style="width: 300px" ng-model="rpc"></div>
+    <div style="float: left;width: 30%;margin: -5px">
+        <button type="button" class="btn btn-default" ng-repeat="period in aReadablePeriodList"
+                ng-class="getPeriodClass( period )" ng-click="setPeriod(period)" ng-disabled="periodDelay">{{period ==
+            "5m" ? "Last " + period : period}}
+        </button>
+    </div>
+    <div style="float: left;width: 5%">
+        <button ng-click="searchTrace()">查询</button>
+    </div>
+</div>
+
 <!-- Add your site or application content here -->
 <div id="main-container" class="main-container">
-    <transaction-table-directive ng-style="table" class="ui-layout-north" loading-directive="sidebarLoading" loading-message="Loading..."></transaction-table-directive>
-    <iframe class="ui-layout-center" ng-src="{{transactionDetailUrl}}" style="border:none;padding:0;margin:0;width:100%;height:100%;" id="transactionDetailIframe"></iframe>
+    <transaction-table-directive ng-style="table" class="ui-layout-north" loading-directive="sidebarLoading"
+                                 loading-message="Loading..."></transaction-table-directive>
+    <iframe class="ui-layout-center" ng-src="{{transactionDetailUrl}}"
+            style="border:none;padding:0;margin:0;width:100%;height:100%;" id="transactionDetailIframe"></iframe>
 </div>

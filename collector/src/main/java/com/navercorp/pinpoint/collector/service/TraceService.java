@@ -16,14 +16,20 @@
 
 package com.navercorp.pinpoint.collector.service;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.navercorp.pinpoint.collector.dao.ApplicationTraceIndexDao;
 import com.navercorp.pinpoint.collector.dao.HostApplicationMapDao;
 import com.navercorp.pinpoint.collector.dao.TraceDao;
+import com.navercorp.pinpoint.collector.sender.KafkaSender;
+import com.navercorp.pinpoint.common.server.bo.AnnotationBo;
 import com.navercorp.pinpoint.common.server.bo.SpanBo;
 import com.navercorp.pinpoint.common.server.bo.SpanChunkBo;
 import com.navercorp.pinpoint.common.server.bo.SpanEventBo;
 import com.navercorp.pinpoint.common.service.ServiceTypeRegistryService;
 import com.navercorp.pinpoint.common.trace.ServiceType;
+import com.navercorp.pinpoint.common.util.TransactionIdUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +57,12 @@ public class TraceService {
     @Autowired
     private ServiceTypeRegistryService registry;
 
+    @Autowired
+    private KafkaSender kafkaSender;
+
+    private Gson gson = new Gson();
+    private JsonParser jsonParser = new JsonParser();
+
     public void insertSpanChunk(final SpanChunkBo spanChunkBo) {
         traceDao.insertSpanChunk(spanChunkBo);
         final ServiceType applicationServiceType = getApplicationServiceType(spanChunkBo);
@@ -68,10 +80,66 @@ public class TraceService {
 
     public void insertSpan(final SpanBo spanBo) {
         traceDao.insert(spanBo);
+        sendTraceIndex(spanBo);
         applicationTraceIndexDao.insert(spanBo);
         insertAcceptorHost(spanBo);
         insertSpanStat(spanBo);
         insertSpanEventStat(spanBo);
+    }
+
+    private void sendTraceIndex(SpanBo spanBo) {
+        String userId = "";
+        String args = "";
+        String attachment = "";
+        String argTypes = "";
+        //dubbo
+        if (spanBo.getServiceType() == 1110 && spanBo.getSpanEventBoList().size() > 0) {
+            // 因为 dubbo的 spanEvent是第1个
+            List<AnnotationBo> list = spanBo.getSpanEventBoList().get(0).getAnnotationBoList();
+            for (AnnotationBo bo : list) {
+                if (bo.getKey() == 93) {
+                    userId = (String) bo.getValue();
+                } else if (bo.getKey() == 94) {
+                    attachment = (String) bo.getValue();
+                } else if (bo.getKey() == 90) {
+                    args = (String) bo.getValue();
+                } else if (bo.getKey() == 95) {
+                    argTypes = (String) bo.getValue();
+                }
+            }
+        }
+        //tomcat
+        if (spanBo.getServiceType() == 1010 && spanBo.getSpanEventBoList().size() > 0) {
+            List<AnnotationBo> list = spanBo.getSpanEventBoList().get(0).getAnnotationBoList();
+            for (AnnotationBo bo : list) {
+                if (spanBo.getRpc().contains("router/api") && bo.getKey() == 41) {
+                    spanBo.setRpc((String) bo.getValue());
+                }
+            }
+            for (SpanEventBo bo : spanBo.getSpanEventBoList()) {
+                if (bo.getServiceType() == 9110) {
+                    userId = (String)bo.getAnnotationBoList().stream().filter(k -> k.getKey() == 93).findAny().map(AnnotationBo::getValue).get();
+                }
+            }
+        }
+
+        JsonObject rootJson = new JsonObject();
+        rootJson.addProperty("applicationId", spanBo.getApplicationId());
+        rootJson.addProperty("elapsed", spanBo.getElapsed());
+        rootJson.addProperty("traceId", TransactionIdUtils.formatString(spanBo.getTransactionId()));
+        rootJson.addProperty("exception", spanBo.getErrCode());
+        rootJson.addProperty("rpc", spanBo.getRpc());
+        rootJson.addProperty("collectorAcceptTime", spanBo.getCollectorAcceptTime());
+        rootJson.addProperty("startTime", spanBo.getStartTime());
+        rootJson.addProperty("spanId", spanBo.getSpanId());
+        rootJson.addProperty("agentId", spanBo.getAgentId());
+        rootJson.addProperty("endpoint", spanBo.getEndPoint());
+        rootJson.addProperty("remoteAddr", spanBo.getRemoteAddr());
+        rootJson.add("attachment", jsonParser.parse(attachment));
+        rootJson.addProperty("args", args);
+        rootJson.addProperty("argTypes", argTypes);
+        rootJson.addProperty("userId", userId);
+        kafkaSender.send(rootJson.toString());
     }
 
     private void insertAcceptorHost(SpanBo span) {

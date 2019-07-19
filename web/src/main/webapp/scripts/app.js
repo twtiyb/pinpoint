@@ -35,6 +35,9 @@ pinpointApp.config(['$routeProvider', '$locationProvider', '$modalProvider', fun
     }).when('/transactionList/:application/:readablePeriod/:queryEndDateTime', {
         templateUrl: 'pages/transactionList/transactionList.html',
         controller: 'TransactionListCtrl'
+    }).when('/transactionList', {
+        templateUrl: 'pages/transactionList/transactionList.html',
+        controller: 'TransactionListCtrl'
     }).when('/transactionList/:application/:readablePeriod/:queryEndDateTime/:transactionInfo', {
         templateUrl: 'pages/transactionList/transactionList.html',
         controller: 'TransactionListCtrl'

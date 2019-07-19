@@ -37,6 +37,7 @@ public class Span extends DefaultFrameAttachment {
 
     private long startTime; // required
     private int elapsedTime; // optional
+    private String userId;
 
     private int apiId; // optional
     private short serviceType; // required
@@ -136,6 +137,14 @@ public class Span extends DefaultFrameAttachment {
 
     public void setApiId(int apiId) {
         this.apiId = apiId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public IntStringValue getExceptionInfo() {

@@ -183,6 +183,11 @@
             <artifactId>metrics-servlets</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <!-- servlet artifactid is odd -->
             <artifactId>javax.servlet-api</artifactId>

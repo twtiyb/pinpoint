@@ -40,11 +40,21 @@
                             ng-class="{true: 'glyphicon-arrow-down', false: 'glyphicon-arrow-up'}[transactionReverse]"></span></div>
                 </th>
                 <th>
+                    <div class="th-inner" ng-click="transactionOrder('userId')">
+                        userId <span ng-show="transactionOrderBy == 'userId'" class="glyphicon"
+                                     ng-class="{true: 'glyphicon-arrow-down', false: 'glyphicon-arrow-up'}[transactionReverse]"></span>
+                    </div>
+                </th>
+                <th>
                     <div class="th-inner" ng-click="transactionOrder('transactionSequence')">
                         Transaction <span ng-show="transactionOrderBy == 'transactionSequence'" class="glyphicon"
                                    ng-class="{true: 'glyphicon-arrow-down', false: 'glyphicon-arrow-up'}[transactionReverse]"></span>
                     </div>
                 </th>
+
+                <!--<th>-->
+                    <!--<div class="th-inne">操作</div>-->
+                <!--</th>-->
             </tr>
             </thead>
             <tbody style="overflow: auto;height:100%">
@@ -62,7 +72,11 @@
                     <td ng-click="traceByApplication(transaction)" style="text-align:center;"><span class="glyphicon glyphicon-fire" ng-show="transaction.exception == 1"></span></td>
                     <td ng-click="traceByApplication(transaction)">{{transaction.agentId}}</td>
                     <td ng-click="traceByApplication(transaction)">{{transaction.remoteAddr}}</td>
-                    <td ng-click="traceByApplication(transaction)">{{transaction.traceId}} <a ng-if="transaction.logPageUrl" class="btn btn-default btn-xs" href="{{transaction.logPageUrl}}" target="_blank">{{transaction.logButtonName}}</a></td>
+                    <td ng-click="traceByApplication(transaction)">{{transaction.userId}}</td>
+                    <td>{{transaction.traceId}}
+                        <a ng-if="transaction.logPageUrl" class="btn btn-default btn-xs" href="{{transaction.logPageUrl}}" target="_blank">{{transaction.logButtonName}}</a>
+                        <button ng-if="!transaction.application.includes('router/api') || !transaction.agentId.includes('gateway')" ng-click="recall(transaction)">重新请求</button>
+                    </td>
                 </tr>
             </tbody>
         </table>

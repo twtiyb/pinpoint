@@ -16,9 +16,12 @@
 
 package com.navercorp.pinpoint.collector;
 
+import org.apache.hadoop.hbase.util.MD5Hash;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
 
 /**
  * @author emeroad
@@ -29,5 +32,14 @@ public class LoggerTest {
         Logger test = LoggerFactory.getLogger(LoggerTest.class);
         test.info("info");
         test.debug("debug");
+    }
+
+
+    @Test
+    public void name() {
+        String cryptStr = MD5Hash.getMD5AsHex(("abvbbbbbbbsbbbbbbbbbbbbbbbbbbbbbbb" + new Date().getTime()).getBytes());
+        String cryptStr2 = MD5Hash.getMD5AsHex(("abvbbbbbbbsbbbbbbbbbbbbbbbbbbbbbbb2" + new Date().getTime()).getBytes());
+        System.out.println(cryptStr);
+        System.out.println(cryptStr2);
     }
 }

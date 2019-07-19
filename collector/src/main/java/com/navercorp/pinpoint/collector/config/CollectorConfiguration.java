@@ -59,7 +59,36 @@ public class CollectorConfiguration implements InitializingBean {
     private String clusterAddress;
     private int clusterSessionTimeout;
 
-    private String clusterListenIp;
+
+	private boolean kafkaEnable;
+	private String kafkaServer;
+	private String kafkaTopic;
+
+	public boolean isKafkaEnable() {
+		return kafkaEnable;
+	}
+
+	public void setKafkaEnable(boolean kafkaEnable) {
+		this.kafkaEnable = kafkaEnable;
+	}
+
+	public String getKafkaServer() {
+		return kafkaServer;
+	}
+
+	public void setKafkaServer(String kafkaServer) {
+		this.kafkaServer = kafkaServer;
+	}
+
+	public String getKafkaTopic() {
+		return kafkaTopic;
+	}
+
+	public void setKafkaTopic(String kafkaTopic) {
+		this.kafkaTopic = kafkaTopic;
+	}
+
+	private String clusterListenIp;
     private int clusterListenPort;
 
     private boolean flinkClusterEnable;
@@ -208,6 +237,10 @@ public class CollectorConfiguration implements InitializingBean {
 
         this.clusterListenIp = readString(properties, "cluster.listen.ip", "");
         this.clusterListenPort = readInt(properties, "cluster.listen.port", -1);
+
+	    this.kafkaEnable = readBoolean(properties, "kafka.send.enable");
+        this.kafkaServer = readString(properties, "kafka.server", "");
+        this.kafkaTopic = readString(properties, "kafka.topic", "");
     }
 
     protected static String readString(Properties properties, String propertyName, String defaultValue) {

@@ -113,7 +113,14 @@ public class DubboProviderInterceptor extends SpanRecursiveAroundInterceptor {
 				invocation.getInvoker().getInterface().getSimpleName() + ":" + invocation.getMethodName());
 		recorder.recordAttribute(DubboConstants.DUBBO_USER_ANNOTATION_KEY,invocation.getAttachment("userId", "1"));
 		try {
-			recorder.recordAttribute(DubboConstants.DUBBO_ARGS_ANNOTATION_KEY, JSON.json(invocation.getArguments()));
+            recorder.recordAttribute(DubboConstants.DUBBO_INVOCATION_ANNOTATION_KEY,JSON.json(invocation.getAttachments()));
+            recorder.recordAttribute(DubboConstants.DUBBO_ARGS_ANNOTATION_KEY, JSON.json(invocation.getArguments()));
+//            Stream.of(invocation.getParameterTypes()).map(k->k.getName()).toArray())
+            String[] strs = new String[invocation.getParameterTypes().length];
+            for (int i = 0; i < strs.length; i++) {
+                strs[i] = invocation.getParameterTypes()[i].getName();
+            }
+            recorder.recordAttribute(DubboConstants.DUBBO_ARGS_TYPE_ANNOTATION_KEY, JSON.json(strs));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

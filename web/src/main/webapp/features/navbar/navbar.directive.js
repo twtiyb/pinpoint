@@ -146,7 +146,7 @@
 						$fromPicker = element.find( "#from-picker" );
 	                    $fromPicker.datetimepicker( getDatePickerOption( "#from-picker-alt" ) );
 	                    setDateTime($fromPicker, oNavbarVoService.getQueryStartTime() || moment().subtract(5, "minute").valueOf());
-	
+
 	                    $toPicker = element.find( "#to-picker");
 	                    $toPicker.datetimepicker( getDatePickerOption( "#to-picker-alt" ) );
 	                    setDateTime($toPicker, oNavbarVoService.getQueryEndTime());

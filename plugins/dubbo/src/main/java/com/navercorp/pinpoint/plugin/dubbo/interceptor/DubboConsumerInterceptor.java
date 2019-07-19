@@ -96,6 +96,7 @@ public class DubboConsumerInterceptor implements AroundInterceptor {
             final RpcInvocation invocation = (RpcInvocation) args[0];
             final SpanEventRecorder recorder = trace.currentSpanEventRecorder();
             recorder.recordApi(descriptor);
+            recorder.recordAttribute(DubboConstants.DUBBO_USER_ANNOTATION_KEY, invocation.getAttachment("userId"));
             if (throwable == null) {
                 String endPoint = RpcContext.getContext().getRemoteAddressString();
                 // RPC client have to record end point (server address)
